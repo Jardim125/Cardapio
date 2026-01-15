@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Completo</title>
+    <style>
+        :root {
+            --primary-color: #ff6d00; /* Laranja vibrante */
+            --bg-color: #121212;      /* Fundo quase preto */
+            --card-bg: #1e1e1e;       /* Fundo do cartão */
+            --text-color: #ffffff;    /* Texto branco */
+            --text-secondary: #b0b0b0; /* Texto cinza claro */
+            --success-color: #43a047;  /* Verde para vegetariano */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 90px;
+        }
+
+        header {
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin: 50px 0 20px 0;
+            padding-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 5px solid var(--primary-color);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Cartão do Produto */
+        .item-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #2c2c2c;
+            position: relative;
+        }
+
+        .card-image::after {
+            content: 'Carregando foto...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #555;
+            font-size: 0.8rem;
+            z-index: 0;
+        }
+
+        .card-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .item-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #fff;
+            margin-right: 10px;
+        }
+
+        .item-price {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+            white-space: nowrap;
+        }
+
+        .item-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+
+        /* Banners Informativos (Trio, Veg, etc) */
+        .info-banner {
+            grid-column: 1 / -1; /* Ocupa toda a largura */
+            background-color: rgba(255, 109, 0, 0.15);
+            border: 1px dashed var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #ffb74d;
+        }
+
+        .veg-banner {
+            border-color: var(--success-color);
+            background-color: rgba(67, 160, 71, 0.15);
+            color: #81c784;
+        }
+
+        /* Lista Simples para Adicionais e Bebidas sem foto */
+        .simple-list {
+            list-style: none;
+            padding: 0;
+        }
+        .simple-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+            font-size: 0.95rem;
+        }
+        .simple-list li:last-child { border-bottom: none; }
+
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Cardápio Digital</h1>
+        <p class="subtitle">Escolha seu pedido e chame o garçom mais próximo</p>
+    </header>
+
+    <div class="container">
+        
+        <h2>Sanduíches</h2>
+        
+        <div class="menu-grid">
+            <div class="info-banner veg-banner">
+                🌱 <strong>OPÇÃO VEGETARIANA:</strong> Troque a carne por hambúrguer de grão de bico.
+            </div>
+            
+            <div class="info-banner">
+                🍟 <strong> Por + R$ 12,00 seu burguer vira um trio!</strong>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Sanduiches\GarlicMetBread.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Garlic Meat Bread</span> <span class="item-price">R$ 28,00</span></div>
+                    <p class="item-desc">Brioche com manteiga de alho e carne assada desfiada.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Sanduiches\Jerry.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Jerry</span> <span class="item-price">R$ 22,00</span></div>
+                    <p class="item-desc">Pão de brioche, 150g de carne e queijo cheddar.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Sanduiches\RedHot.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Red Hot</span> <span class="item-price">R$ 26,00</span></div>
+                    <p class="item-desc">Brioche, 150g carne, cheddar, cebola crispy e sweet chilli.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Sanduiches\ILoveBacon.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">I Love Bacon</span> <span class="item-price">R$ 28,00</span></div>
+                    <p class="item-desc">Brioche, 150g carne, cheddar, ketchup e bacon em tiras.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Sanduiches\Salad.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Salad</span> <span class="item-price">R$ 25,00</span></div>
+                    <p class="item-desc">Brioche, 150g carne, cheddar, tomate, alface, cebola roxa e maionese.</p>
+                </div>
+            </div>
+             <div class="item-card">
+                <img src="Imagens\Sanduiches\MonsterBurguer.png" alt="Lanche" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Monster Burguer</span> <span class="item-price">R$ 32,00</span></div>
+                    <p class="item-desc">Brioche, 150g de carne bovina e linguiça de  pernil, queijo cheddar, tomate, cebola roxa, alface,bacon, picles, maionese, mostarda e ketchup. 
+                    </p>
+                </div>
+            </div>
+
+            <div class="item-card" style="border-style: dashed;">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title" style="color:var(--primary-color)">+ Adicionais</span></div>
+                    <ul class="simple-list">
+                        <li><span>Carne Extra</span> <span>R$ 8,00</span></li>
+                        <li><span>Bacon</span> <span>R$ 6,00</span></li>
+                        <li><span>Creme de Cheddar</span> <span>R$ 6,00</span></li>
+                        <li><span>Sweet Chilli</span> <span>R$ 5,00</span></li>
+                        <li><span>Salada</span> <span>R$ 5,00</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h2>Refeições</h2>
+        <div class="menu-grid">
+            <div class="info-banner" style="grid-column: 1 / -1; font-size: 0.9rem; color: #ccc; border-color: #555;">
+                ℹ️ Os legumes podem ser trocados por batata frita.
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Refeições\RefeicaoFrango.png" alt="Refeição" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Refeição Frango</span> <span class="item-price">R$ 28,00</span></div>
+                    <p class="item-desc">Acompanha arroz, feijão e legumes ou batata frita 
+                    </p>
+                </div>
+            </div>
+            
+            <div class="item-card">
+                <img src="Imagens\Refeições\RefeiçãoContraFile.jpg" alt="Refeição" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Refeição Contra-filé</span> <span class="item-price">R$ 35,00</span></div>
+                    <p class="item-desc">Acompanha arroz, feijão e legumes ou batata frita 
+                    </p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\Refeições\CurryComArroz.png" alt="Refeição" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Curry com arroz</span> <span class="item-price">R$ 30,00</span></div>
+                    <p class="item-desc">Curry de frango e legumes com arroz 
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Batatas</h2>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Batata+Simples" alt="Batata" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Batata Simples</span> <span class="item-price">R$ 25,00</span></div>
+                </div>
+            </div>
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Cheddar+Bacon" alt="Batata" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Cheddar Bacon</span> <span class="item-price">R$ 35,00</span></div>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+        <h2>Petiscos</h2>
+        <div class="menu-grid">
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Salgadinhos" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Salgadinhos</span></div>
+                    <p class="item-desc">Porção mista.</p>
+                    <div class="item-price" style="font-size:0.9rem">10un: R$ 12,00 | 20un: R$ 20,00</div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Camarao" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Camarão Empanado</span></div>
+                    <div class="item-price" style="font-size:0.9rem">10un: R$ 22,00 | 20un: R$ 37,00</div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="Imagens\unnamed.jpg" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Nachos</span> <span class="item-price">R$ 35,00</span></div>
+                    <p class="item-desc">Tortilhas, cheddar, guacamole, chilli e salsa mexicana.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Trio+Boteco" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Trio Boteco</span> <span class="item-price">R$ 30,00</span></div>
+                    <p class="item-desc">Salaminho, azeitona e ovo de codorna.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Bolinhos" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Bolinhos do Sanji</span> <span class="item-price">R$ 30,00</span></div>
+                    <p class="item-desc">Bolinhos de carne com batata e cebolinha fritos.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Frango+Tiras" alt="Foto" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Frango ao coco</span> <span class="item-price">R$ 30,00</span></div>
+                    <p class="item-desc">Empanado na Panko com coco e molho.</p>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Caldo de ervilha" alt="Foto" class="card-image">
+
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Caldo de Ervilha (300ml)</span> <span class="item-price">R$ 15,00</span></div>
+                </div>
+            </div>
+
+            <div class="item-card">
+                                <img src="https://placehold.co/600x400/222/orange?text=Macarrao à Bolonhesa" alt="Foto" class="card-image">
+
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Macarrão Bolonhesa</span> <span class="item-price">R$ 15,00</span></div>
+                    <p class="item-desc">100g de macarrão ao molho.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Drinks & Caipirinhas</h2>
+        <div class="menu-grid">
+            </div>
+
+            <div class="item-card">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Caipirinhas</span></div>
+                    <ul class="simple-list">
+                        <li><span>Limão</span> <span>R$ 14,00</span></li>
+                        <li><span>Frutas</span> <span>R$ 16,00</span></li>
+                        <li><span>Dose dupla de limão</span> <span>R$ 22,00</span></li>
+
+                    </ul>
+                </div>
+            </div>
+
+             <div class="item-card">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Caipivodkas</span></div>
+                    <ul class="simple-list">
+                        <li><span>Limão</span> <span>R$ 16,00</span></li>
+                        <li><span>Frutas</span> <span>R$ 18,00</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <img src="https://placehold.co/600x400/222/orange?text=Drinks+Especiais" alt="Drinks" class="card-image">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Clássicos</span></div>
+                    <ul class="simple-list">
+                        <li><span>Mojito</span> <span>R$ 18,00</span></li>
+                        <li><span>Pina Colada</span> <span>R$ 25,00</span></li>
+                        <li><span>Sex on the Beach</span> <span>R$ 20,00</span></li>
+                        <li><span>Gin Tônica</span> <span>R$ 18,00</span></li>
+                        <li><span>Tropical Gin</span> <span>R$ 25,00</span></li>
+                        <li><span>Cuba Libre</span> <span>R$ 15,00</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+    
+        </div>
+
+        <h2>Cervejas e Bebidas</h2>
+        <div class="menu-grid">
+            
+            <div class="item-card">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Cervejas</span></div>
+                    <ul class="simple-list">
+                        <li><span>Heineken / Corona</span> <span>R$ 12,00</span></li>
+                        <li><span>Stella</span> <span>R$ 10,00</span></li>
+                        <li><span>Skol Beats GT</span> <span>R$ 12,00</span></li>
+                        <li><span>Brahma 550ml</span> <span>R$ 10,00</span></li>
+                        <li><span>Império Latão</span> <span>R$ 8,00</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="card-content">
+                    <div class="card-header"><span class="item-title">Sem Álcool</span></div>
+                    <ul class="simple-list">
+                        <li><span>Água (s/ gás)</span> <span>R$ 4,00</span></li>
+                        <li><span>Água (c/ gás)</span> <span>R$ 4,50</span></li>
+                        <li><span>Refrigerante</span> <span>R$ 7,00</span></li>
+                        <li><span>Tônica / Citrus</span> <span>R$ 8,00</span></li>
+                        <li><span>Mate</span> <span>R$ 7,00</span></li>
+                        <li><span>Guaravita</span> <span>R$ 4,00</span></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="fixed-footer">
+        <span style="font-size: 1.4rem; vertical-align: middle;">✋</span> Chame o garçom para fazer seu pedido
+    </div>
+
+</body>
+ <footer>
+        <p>Jardim125.</p>
+        <a href="https://www.instagram.com/jardim125/ target="_blank">Visite nosso Instagram</a>
+    </footer>
+</html>
